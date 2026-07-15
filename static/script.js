@@ -189,21 +189,44 @@ function parseUserMessage(text) {
   return 'unknown';
 }
 
-function generateChatbotResponse() {
+async function generateChatbotResponse() {
   if (!chatbotPet) {
     return 'Silakan sebutkan jenis hewan Anda. Contoh: <b>Kucing</b> atau <b>Anjing</b>';
   }
   if (chatbotSymptoms.size === 0) {
     return `Hewan terdeteksi: <b>${chatbotPet === 'kucing' ? 'Kucing' : 'Anjing'}</b>. Sekarang ceritakan gejala yang dialami.`;
   }
-  triggerChatbotDiagnosis([...chatbotSymptoms], chatbotPet);
-  const daftar = [...chatbotSymptoms].map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
-  let response = `${chatbotSymptoms.size} gejala terdeteksi:<br>${daftar}<br><br>`;
-  response += '<i>Menganalisis hasil...</i>';
-  return response;
+  const gejalaArr = [...chatbotSymptoms];
+  const daftar = gejalaArr.map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
+  let html = `${gejalaArr.length} Gejala Terdeteksi:<br>${daftar}<br><br>`;
+  try {
+    const response = await fetch('/diagnosa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gejala: gejalaArr, hewan: chatbotPet })
+    });
+    if (!response.ok) throw new Error("Gagal hubungi server.");
+    const data = await response.json();
+    html += `<b>Hasil Diagnosa</b><br>`;
+    if (!data.ada_diagnosa) {
+      html += `<span>✅ Tidak ada penyakit yang terdeteksi.</span>`;
+    } else {
+      html += data.hasil.map(r =>
+        `<div style="margin-top:0.5rem; padding:0.5rem; border-left:4px solid ${r.warna}; background:#1a1f2e; border-radius:6px;">
+          <b style="color:${r.warna}">${r.nama}</b> <span style="color:#94a3b8; font-size:0.8rem;">(${r.keyakinan}%)</span>
+          <p style="margin:0.25rem 0 0; font-size:0.8rem; color:#cbd5e1;">${r.deskripsi}</p>
+        </div>`
+      ).join('');
+    }
+  } catch (error) {
+    console.error(error);
+    html += '<span style="color:#ef4444;">⚠️ Gagal mengambil hasil diagnosa.</span>';
+  }
+  html += `<br><i style="color:#94a3b8;">Ada gejala lain? Ceritakan saja...</i>`;
+  return html;
 }
 
-function handleChatInput() {
+async function handleChatInput() {
   const field = document.getElementById('chat-input-field');
   const text = field.value.trim();
   if (!text) return;
@@ -211,9 +234,9 @@ function handleChatInput() {
   addUserMessage(text);
   const result = parseUserMessage(text);
   if (result === 'unknown') {
-    addBotMessage(generateChatbotResponse());
+    addBotMessage(await generateChatbotResponse());
   } else {
-    setTimeout(() => { addBotMessage(generateChatbotResponse()); }, 300);
+    setTimeout(async () => { addBotMessage(await generateChatbotResponse()); }, 300);
   }
 }
 
@@ -280,35 +303,7 @@ async function triggerBackendDiagnosis(symptomsArray, petType) {
   }
 }
 
-async function triggerChatbotDiagnosis(symptomsArray, petType) {
-  try {
-    const response = await fetch('/diagnosa', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gejala: symptomsArray, hewan: petType })
-    });
-    if (!response.ok) throw new Error("Terjadi kesalahan koneksi server.");
-    const data = await response.json();
-    const daftar = symptomsArray.map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
-    let html = `<b>${symptomsArray.length} Gejala Terdeteksi</b><br>${daftar}<br><br>`;
-    html += `<b>Hasil Diagnosa</b><br>`;
-    if (!data.ada_diagnosa) {
-      html += `<span>✅ Tidak ada penyakit yang terdeteksi.</span>`;
-    } else {
-      html += data.hasil.map(r =>
-        `<div style="margin-top:0.5rem; padding:0.5rem; border-left:4px solid ${r.warna}; background:#1a1f2e; border-radius:6px;">
-          <b style="color:${r.warna}">${r.nama}</b> <span style="color:#94a3b8; font-size:0.8rem;">(${r.keyakinan}%)</span>
-          <p style="margin:0.25rem 0 0; font-size:0.8rem; color:#cbd5e1;">${r.deskripsi}</p>
-        </div>`
-      ).join('');
-    }
-    html += `<br><i style="color:#94a3b8;">Ada gejala lain? Ceritakan saja...</i>`;
-    addBotMessage(html);
-  } catch (error) {
-    console.error(error);
-    addBotMessage("Maaf, terjadi kesalahan saat menghubungi server. Silakan coba lagi.");
-  }
-}
+
 
 function renderDiagnosticResults(data) {
   const emptyState = document.getElementById('panel-empty-state');
