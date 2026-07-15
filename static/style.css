@@ -60,15 +60,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background: #0f172a;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   transition: var(--transition);
 }
 
 .navbar.scrolled {
-  background: rgba(15, 23, 42, 0.95);
+  background: #0f172a;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
