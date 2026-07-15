@@ -1300,13 +1300,11 @@
       if (/\b(kucing|cat)\b/.test(lower)) {
         if (chatbotPet !== 'kucing') {
           chatbotPet = 'kucing';
-          addUserMessage('Kucing');
           return 'hewan';
         }
       } else if (/\b(anjing|dog|asu)\b/.test(lower)) {
         if (chatbotPet !== 'anjing') {
           chatbotPet = 'anjing';
-          addUserMessage('Anjing');
           return 'hewan';
         }
       }
@@ -1318,7 +1316,6 @@
           if (lower.includes(keyword)) {
             if (!chatbotSymptoms.has(item.gid)) {
               chatbotSymptoms.add(item.gid);
-              addUserMessage(`Gejala: ${GEJALA[item.gid]}`);
               found = true;
             }
             break;
@@ -1345,8 +1342,8 @@
       const daftar = [...chatbotSymptoms].map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
       let s = chatbotSymptoms.length > 1 ? 'gejala terdeteksi' : 'gejala terdeteksi';
 
-      let response = `✅ ${chatbotSymptoms.length} ${s}:<br>${daftar}<br><br>`;
-      response += '📊 <b>Hasil Diagnosa</b> (lihat panel kanan)<br>';
+      let response = `${chatbotSymptoms.length} ${s}:<br>${daftar}<br><br>`;
+      response += '<b>Hasil Diagnosa</b> (lihat panel kanan)<br>';
       response += '<i>Ada gejala lain? Ceritakan saja...</i>';
 
       return response;
