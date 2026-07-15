@@ -12,7 +12,10 @@
 <body>
 
   <nav class="navbar" id="navbar">
-    <a href="/" class="nav-brand">VetExpert</a>
+    <a href="/" class="nav-brand">
+      <img src="{{ url_for('static', filename='favicon.svg') }}" alt="VetExpert" style="height:32px; width:32px;">
+      VetExpert
+    </a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">Menu</button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/" class="nav-cta">Beranda</a></li>
@@ -95,6 +98,9 @@
             <div id="container-disease-cards"></div>
           </div>
         </div>
+        <a href="https://www.halodoc.com/tanya-dokter/kategori/dokter-hewan" target="_blank" rel="noopener" class="btn btn-primary" style="display:flex; text-decoration:none; justify-content:center; margin-top:0.75rem;">
+          Konsultasi dengan Dokter Hewan di Halodoc &rarr;
+        </a>
       </div>
     </div>
   </main>
@@ -111,16 +117,7 @@
 
   <script>
     const GEJALA = {{ gejala | tojson }};
-    const PENYAKIT_RULES = {
-      P01: { nama: "Toxoplasmosis", hewan: ["kucing","anjing"], gejala_kunci: ["G05","G06","G07","G08","G09","G10","G11","G12","G13","G14"], gejala_umum: ["G01","G02","G03","G04"], min_kunci: 2 },
-      P02: { nama: "Rabies", hewan: ["kucing","anjing"], gejala_kunci: ["G15","G16","G17","G18","G19","G20","G21","G22","G23","G24"], gejala_umum: ["G01","G02","G03","G04"], min_kunci: 2 }
-    };
-    const GRUP = {
-      umum:   ['G01','G02','G03','G04'],
-      toxo:   ['G05','G06','G07','G08','G09','G10','G11','G12','G13','G14'],
-      rabies: ['G15','G16','G17','G18','G19','G20','G21','G22','G23','G24']
-    };
-    const ALL_GEJALA_IDS = [...GRUP.umum, ...GRUP.toxo, ...GRUP.rabies];
+    const ALL_GEJALA_IDS = ['G01','G02','G03','G04','G05','G06','G07','G08','G09','G10','G11','G12','G13','G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24'];
   </script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

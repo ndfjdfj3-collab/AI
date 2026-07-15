@@ -3,7 +3,6 @@ import os
 sys.path.insert(0, os.path.dirname(__file__))
 
 import openpyxl
-from knowledge_base import GEJALA
 from engine import forward_chaining
 
 EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'dataset_vetexpert.xlsx')

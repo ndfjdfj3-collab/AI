@@ -1,5 +1,5 @@
 # pyrefly: ignore [missing-import]
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from engine import forward_chaining
 from knowledge_base import GEJALA
 
@@ -18,7 +18,9 @@ def diagnosa_page():
 
 @app.route('/diagnosa', methods=['POST'])
 def diagnosa():
-    data         = request.get_json()
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Body harus JSON'}), 400
     gejala_input = data.get('gejala', [])
     jenis_hewan  = data.get('hewan', 'kucing')
     hasil        = forward_chaining(gejala_input, jenis_hewan)
@@ -30,6 +32,10 @@ def diagnosa():
         'ada_diagnosa' : len(hasil) > 0,
     })
 
+
+@app.route('/favicon.ico')
+def favicon():
+    return redirect(url_for('static', filename='favicon.svg'))
 
 @app.route('/gejala_info/<gid>')
 def gejala_info(gid):

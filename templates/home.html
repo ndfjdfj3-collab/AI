@@ -8,12 +8,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
   <nav class="navbar" id="navbar">
-    <a href="/" class="nav-brand">VetExpert</a>
+    <a href="/" class="nav-brand">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="VetExpert" style="height:80px; width:80px;">
+      VetExpert
+    </a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">Menu</button>
     <ul class="nav-links" id="nav-links">
       <li><a href="#tentang">Tentang</a></li>

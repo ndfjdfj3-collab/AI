@@ -20,8 +20,6 @@ fill_ganjil = PatternFill(start_color='FFFFFF', end_color='FFFFFF', fill_type='s
 fill_toxo = PatternFill(start_color='FFF2CC', end_color='FFF2CC', fill_type='solid')
 fill_rabies = PatternFill(start_color='FCE4EC', end_color='FCE4EC', fill_type='solid')
 fill_campuran = PatternFill(start_color='E8F5E9', end_color='E8F5E9', fill_type='solid')
-fill_fp = PatternFill(start_color='E3F2FD', end_color='E3F2FD', fill_type='solid')
-fill_cpv = PatternFill(start_color='F3E5F5', end_color='F3E5F5', fill_type='solid')
 fill_negatif = PatternFill(start_color='F5F5F5', end_color='F5F5F5', fill_type='solid')
 
 
@@ -88,10 +86,6 @@ rules_data = [
     (10, 'R10', 'G01, G02, G03, G15, G17, G19, G24',           'Rabies komplit',                           5, 1, 2),
     (11, 'R11', 'G05, G06, G15, G17',                          'Campuran Toxoplasmosis + Rabies',          4, 1, 2),
     (12, 'R12', 'G01, G02, G03, G04',                          'Hanya gejala umum',                        0, 0, 0),
-    (13, 'R13', 'G07, G08',                                    'Gejala ringan Feline Panleukopenia',       4, 1, 2),
-    (14, 'R14', 'G07, G08, G11, G13, G14',                     'Gejala berat Feline Panleukopenia',        4, 1, 2),
-    (15, 'R15', 'G08, G09',                                    'Gejala ringan Canine Parvovirus',          4, 1, 2),
-    (16, 'R16', 'G08, G09, G10, G11, G22',                     'Gejala berat Canine Parvovirus',           4, 1, 2),
 ]
 apply_data(ws2, rules_data, center_cols=[1, 2, 5, 6, 7])
 for col, w in [('A', 8), ('B', 14), ('C', 40), ('D', 35), ('E', 14), ('F', 13), ('G', 11)]:
@@ -114,11 +108,7 @@ diag_data = [
     (9,  'D09', 'R09', 'Rabies',                     'Kucing, Anjing', 'G17, G18, G22, G23, G24',    'G01, G02, G03, G04'),
     (10, 'D10', 'R10', 'Rabies',                     'Kucing, Anjing', 'G15, G17, G19',               'G01, G02, G03'),
     (11, 'D11', 'R11', 'Toxoplasmosis + Rabies',     'Kucing, Anjing', 'G05, G06, G15, G17',           'G01'),
-    (12, 'D12', 'R12', 'Tidak Terdiagnosa',           'Kucing, Anjing', '-',                           'G01, G02, G03, G04'),
-    (13, 'D13', 'R13', 'Feline Panleukopenia',        'Kucing',          'G07, G08',                    'G01, G02, G03'),
-    (14, 'D14', 'R14', 'Feline Panleukopenia',        'Kucing',          'G07, G08, G11, G13, G14',     'G01, G02, G03'),
-    (15, 'D15', 'R15', 'Canine Parvovirus',            'Anjing',          'G08, G09',                    'G01, G02, G03'),
-    (16, 'D16', 'R16', 'Canine Parvovirus',            'Anjing',          'G08, G09, G10, G11, G22',     'G01, G02, G03'),
+    (12, 'D12', 'R12', 'Tidak Terdiagnosa',          'Kucing, Anjing', '-',                           'G01, G02, G03, G04'),
 ]
 
 for r, row_data in enumerate(diag_data):
@@ -126,10 +116,6 @@ for r, row_data in enumerate(diag_data):
     diagnosis = row_data[3]
     if 'Toxoplasmosis' in diagnosis and 'Rabies' in diagnosis:
         fill = fill_campuran
-    elif 'Panleukopenia' in diagnosis:
-        fill = fill_fp
-    elif 'Parvovirus' in diagnosis:
-        fill = fill_cpv
     elif 'Toxoplasmosis' in diagnosis:
         fill = fill_toxo
     elif 'Rabies' in diagnosis:
