@@ -88,4 +88,50 @@ PENYAKIT = {
         "bobot_umum"  : 1,
         "min_kunci"   : 2,
     },
+    "P03": {
+        "nama"      : "Feline Panleukopenia",
+        "hewan"     : ["kucing"],
+        "deskripsi" : (
+            "Feline Panleukopenia (FP) adalah penyakit virus sangat menular yang disebabkan "
+            "oleh Feline Parvovirus. Penyakit ini menyerang sel-sel darah putih dan saluran "
+            "pencernaan kucing, dengan angka kematian tinggi terutama pada anak kucing."
+        ),
+        "penanganan": [
+            "Segera bawa ke dokter hewan untuk tes darah (leukopenia parah indikasi kuat FP)",
+            "Terapi suportif: infus cairan untuk dehidrasi, elektrolit, dan nutrisi parenteral",
+            "Pemberian antibiotik spektrum luas untuk mencegah infeksi sekunder",
+            "Isolasi ketat karena virus sangat menular melalui feses, urin, dan fomites",
+            "Desinfeksi lingkungan dengan pemutih (bleach) karena virus sangat resisten",
+            "Vaksinasi FPV pada semua kucing sehat sebagai pencegahan utama",
+            "Karantina minimal 2 minggu untuk kucing baru sebelum diperkenalkan",
+        ],
+        "gejala_kunci": ["G07", "G08", "G11", "G13", "G14"],
+        "gejala_umum" : ["G01", "G02", "G03"],
+        "bobot_kunci" : 4,
+        "bobot_umum"  : 1,
+        "min_kunci"   : 2,
+    },
+    "P04": {
+        "nama"      : "Canine Parvovirus",
+        "hewan"     : ["anjing"],
+        "deskripsi" : (
+            "Canine Parvovirus (CPV) adalah penyakit virus sangat menular yang menyerang "
+            "saluran pencernaan anjing, terutama anak anjing usia 6 minggu–6 bulan. "
+            "CPV menyebabkan muntah hebat, diare berdarah, dan dehidrasi berat."
+        ),
+        "penanganan": [
+            "DARURAT: Segera bawa ke dokter hewan untuk hospitalisasi",
+            "Terapi cairan intravena agresif untuk mengatasi dehidrasi dan syok hipovolemik",
+            "Pemberian antiemetik (maropitant) untuk menghentikan muntah",
+            "Antibiotik spektrum luas untuk mencegah sepsis bakteri sekunder",
+            "Isolasi ketat karena virus sangat menular melalui feses",
+            "Desinfeksi lingkungan dengan pemutih atau desinfektan khusus parvovirus",
+            "Vaksinasi CPV pada anak anjing mulai usia 6–8 minggu, booster rutin",
+        ],
+        "gejala_kunci": ["G08", "G09", "G10", "G11", "G22"],
+        "gejala_umum" : ["G01", "G02", "G03"],
+        "bobot_kunci" : 4,
+        "bobot_umum"  : 1,
+        "min_kunci"   : 2,
+    },
 }

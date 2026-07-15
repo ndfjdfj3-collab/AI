@@ -5,428 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VetExpert – Sistem Pakar Diagnosa Penyakit Hewan</title>
   <meta name="description" content="VetExpert adalah sistem pakar berbasis Forward Chaining untuk mendiagnosa dini penyakit Toxoplasmosis dan Rabies pada kucing dan anjing.">
-  
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    /* ═══════════════════════════════════════════════
-       DESIGN TOKENS
-       ═══════════════════════════════════════════════ */
-    :root {
-      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      
-      /* Primary Palette */
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #e0e7ff;
-      --primary-glow: rgba(79, 70, 229, 0.25);
-      
-      --secondary: #0d9488;
-      --secondary-light: #ccfbf1;
-      
-      /* Neutrals */
-      --neutral-50: #f8fafc;
-      --neutral-100: #f1f5f9;
-      --neutral-200: #e2e8f0;
-      --neutral-300: #cbd5e1;
-      --neutral-400: #94a3b8;
-      --neutral-700: #334155;
-      --neutral-800: #1e293b;
-      --neutral-900: #0f172a;
-      
-      /* Status */
-      --success: #10b981;
-      --danger: #ef4444;
-      
-      /* Misc */
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --radius-sm: 8px;
-      --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --text-muted: #64748b;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--neutral-50);
-      color: var(--neutral-800);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    /* ═══════════════════════════════════════════════
-       NAVIGATION BAR
-       ═══════════════════════════════════════════════ */
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 0 2rem;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      transition: var(--transition);
-    }
-
-    .navbar.scrolled {
-      background: rgba(15, 23, 42, 0.95);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.4rem;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-sm);
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .nav-cta {
-      background: var(--primary) !important;
-      color: #fff !important;
-      font-weight: 700 !important;
-      padding: 0.55rem 1.4rem !important;
-      border-radius: var(--radius-sm) !important;
-      box-shadow: 0 4px 12px var(--primary-glow);
-    }
-
-    .nav-cta:hover {
-      background: var(--primary-hover) !important;
-      transform: translateY(-1px);
-    }
-
-    /* Mobile nav toggle */
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.8rem;
-      cursor: pointer;
-      padding: 0.25rem;
-    }
-
-    @media (max-width: 768px) {
-      .nav-toggle { display: block; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 72px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        background: rgba(15, 23, 42, 0.97);
-        backdrop-filter: blur(16px);
-        padding: 1rem;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a { padding: 0.75rem 1rem; width: 100%; }
-    }
-
-    /* ═══════════════════════════════════════════════
-       HERO SECTION
-       ═══════════════════════════════════════════════ */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(160deg, #090d16 0%, #111827 40%, #1e1b4b 100%);
-      overflow: hidden;
-      padding: 6rem 2rem 4rem;
-    }
-
-    /* Animated orbs */
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      animation: orbFloat 8s ease-in-out infinite;
-    }
-
-    .hero-orb--1 {
-      width: 400px;
-      height: 400px;
-      background: rgba(79, 70, 229, 0.15);
-      top: -10%;
-      left: -5%;
-      animation-delay: 0s;
-    }
-
-    .hero-orb--2 {
-      width: 350px;
-      height: 350px;
-      background: rgba(13, 148, 136, 0.12);
-      bottom: -15%;
-      right: -5%;
-      animation-delay: -4s;
-    }
-
-    .hero-orb--3 {
-      width: 200px;
-      height: 200px;
-      background: rgba(99, 102, 241, 0.1);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: -2s;
-    }
-
-    @keyframes orbFloat {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-30px) scale(1.05); }
-    }
-
-    /* Grid pattern overlay */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      max-width: 720px;
-    }
-
-    .hero h1 {
-      font-size: clamp(3rem, 6vw, 4.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: fadeInUp 0.7s ease forwards;
-      animation-delay: 0.25s;
-      opacity: 0;
-    }
-
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      animation: fadeInUp 0.7s ease forwards;
-      animation-delay: 0.55s;
-      opacity: 0;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      border: none;
-      border-radius: var(--radius-md);
-      font-family: var(--font-sans);
-      font-weight: 700;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: var(--transition);
-      text-decoration: none;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: 0 4px 20px var(--primary-glow), 0 0 0 0 rgba(79, 70, 229, 0);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(79, 70, 229, 0.35);
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ═══════════════════════════════════════════════
-       DISEASE INFO — ARTICLE STYLE
-       ═══════════════════════════════════════════════ */
-    .article-section {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 4rem 2rem 3rem;
-    }
-
-    .article-section h2 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--neutral-900);
-      margin-bottom: 2.5rem;
-      text-align: center;
-    }
-
-    .article-entry {
-      margin-bottom: 2.5rem;
-    }
-
-    .article-entry:last-child {
-      margin-bottom: 0;
-    }
-
-    .article-entry h3 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--neutral-900);
-      margin-bottom: 0.75rem;
-    }
-
-    .article-entry p {
-      font-size: 1.25rem;
-      line-height: 1.8;
-      color: var(--neutral-700);
-    }
-
-    .article-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--neutral-200);
-      margin: 0 0 2.5rem;
-    }
-
-    /* ═══════════════════════════════════════════════
-       FOOTER
-       ═══════════════════════════════════════════════ */
-    .footer {
-      background: var(--neutral-900);
-      color: rgba(255, 255, 255, 0.5);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .footer-copy {
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    .footer-copy strong {
-      color: #ef4444;
-      display: inline-block;
-      margin-top: 0.5rem;
-    }
-
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-  <!-- ══ NAVIGATION ══ -->
   <nav class="navbar" id="navbar">
-    <a href="/" class="nav-brand">
-      VetExpert
-    </a>
+    <a href="/" class="nav-brand">VetExpert</a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">Menu</button>
     <ul class="nav-links" id="nav-links">
+      <li><a href="#tentang">Tentang</a></li>
       <li><a href="/diagnosa" class="nav-cta">Mulai Diagnosa</a></li>
     </ul>
   </nav>
 
-  <!-- ══ HERO SECTION ══ -->
   <section class="hero">
     <div class="hero-orb hero-orb--1"></div>
     <div class="hero-orb hero-orb--2"></div>
     <div class="hero-orb hero-orb--3"></div>
-
     <div class="hero-content">
       <h1>Diagnosa Cerdas untuk Hewan Kesayangan Anda</h1>
       <div class="hero-actions">
-        <a href="/diagnosa" class="btn btn-primary" id="btn-hero-cta">
-          Mulai Diagnosa Sekarang
-        </a>
+        <a href="/diagnosa" class="btn btn-primary">Mulai Diagnosa Sekarang</a>
       </div>
-
     </div>
   </section>
 
-  <!-- ══ DISEASE INFO — ARTICLE STYLE ══ -->
-  <section class="article-section">
+  <section class="article-section" id="tentang">
     <h2>Tentang Penyakit yang Dideteksi</h2>
-
-    <div class="article-entry">
-      <h3>Toxoplasmosis</h3>
-      <p>Toxoplasmosis adalah penyakit infeksi yang disebabkan oleh parasit <em>Toxoplasma gondii</em>. Kucing adalah inang definitif utama, sementara anjing dapat terinfeksi sebagai inang perantara. Parasit ini dapat menular ke manusia melalui kontak dengan feses hewan yang terinfeksi, sehingga sangat berbahaya bagi ibu hamil dan penderita imunokompromais.</p>
-    </div>
-
-    <div class="article-divider"></div>
-
-    <div class="article-entry">
-      <h3>Rabies</h3>
-      <p>Rabies adalah penyakit virus fatal yang menyerang sistem saraf pusat, disebabkan oleh <em>Lyssavirus</em>. Rabies menular melalui gigitan atau cakaran hewan yang terinfeksi. Penyakit ini hampir selalu berakibat fatal jika tidak ditangani sebelum gejala muncul. Rabies termasuk zoonosis berbahaya yang wajib dilaporkan ke otoritas kesehatan hewan.</p>
+    <p class="section-sub">Sistem kami dapat mendeteksi 2 jenis penyakit pada kucing dan anjing</p>
+    <div class="card-grid">
+      <div class="card-disease">
+        <h3>Toxoplasmosis</h3>
+        <p>Penyakit infeksi yang disebabkan oleh parasit <em>Toxoplasma gondii</em>. Kucing adalah inang definitif utama. Sangat berbahaya bagi ibu hamil dan penderita imunokompromais karena dapat menular ke manusia.</p>
+        <a href="https://www.halodoc.com/kesehatan/toksoplasmosis" target="_blank" rel="noopener" class="btn-link">Baca selengkapnya &rarr;</a>
+        <span class="badge badge--toxo">infeksi parasit</span>
+      </div>
+      <div class="card-disease">
+        <h3>Rabies</h3>
+        <p>Penyakit virus fatal yang menyerang sistem saraf pusat, disebabkan oleh <em>Lyssavirus</em>. Menular melalui gigitan atau cakaran hewan terinfeksi. Hampir selalu fatal jika tidak ditangani sebelum gejala muncul.</p>
+        <a href="https://www.halodoc.com/kesehatan/rabies" target="_blank" rel="noopener" class="btn-link">Baca selengkapnya &rarr;</a>
+        <span class="badge badge--rabies">virus</span>
+      </div>
     </div>
   </section>
 
-  <!-- ══ FOOTER ══ -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-copy">
@@ -438,39 +63,12 @@
   </footer>
 
   <script>
-    // ── Navbar scroll effect ──
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 30);
-    });
-
-    // ── Mobile nav toggle ──
-    function toggleNav() {
-      document.getElementById('nav-links').classList.toggle('open');
-    }
-
-    // Close mobile nav on link click
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 30); });
+    function toggleNav() { document.getElementById('nav-links').classList.toggle('open'); }
     document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', () => {
-        document.getElementById('nav-links').classList.remove('open');
-      });
+      link.addEventListener('click', () => { document.getElementById('nav-links').classList.remove('open'); });
     });
-
-    // ── Scroll Reveal Animation (preserved for future use) ──
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length) {
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add('visible');
-            }, index * 80);
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      revealElements.forEach(el => revealObserver.observe(el));
-    }
   </script>
 </body>
 </html>
