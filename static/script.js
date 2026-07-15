@@ -127,7 +127,7 @@ const KEYWORD_MAP = [
   { keywords: ['nafsu makan', 'tidak mau makan', 'susah makan', 'makan berkurang'], gid: 'G02' },
   { keywords: ['lemas', 'lemah', 'lesu', 'lunglai', 'tidak aktif'], gid: 'G03' },
   { keywords: ['perilaku', 'aneh', 'berubah', 'beda', 'tidak biasa'], gid: 'G04' },
-  { keywords: ['mata merah', 'belekan', 'mata berair', 'konjungtivitis', 'mara merah'], gid: 'G05' },
+  { keywords: ['mata merah', 'belekan', 'mata berair', 'konjungtivitis'], gid: 'G05' },
   { keywords: ['penglihatan', 'kabur', 'buta', 'mata kabur', 'tidak melihat'], gid: 'G06' },
   { keywords: ['kejang', 'tremor', 'gemetar', 'kejang-kejang', 'kaku'], gid: 'G07' },
   { keywords: ['diare', 'muntah', 'mencret', 'berak', 'muntah-muntah'], gid: 'G08' },
@@ -168,10 +168,11 @@ function restartChatBot() {
 
 function parseUserMessage(text) {
   const lower = text.toLowerCase();
+  let hewanDetected = false;
   if (/\b(kucing|cat)\b/.test(lower)) {
-    if (chatbotPet !== 'kucing') { chatbotPet = 'kucing'; return 'hewan'; }
+    if (chatbotPet !== 'kucing') { chatbotPet = 'kucing'; hewanDetected = true; }
   } else if (/\b(anjing|dog|asu)\b/.test(lower)) {
-    if (chatbotPet !== 'anjing') { chatbotPet = 'anjing'; return 'hewan'; }
+    if (chatbotPet !== 'anjing') { chatbotPet = 'anjing'; hewanDetected = true; }
   }
   let found = false;
   for (const item of KEYWORD_MAP) {
@@ -182,6 +183,8 @@ function parseUserMessage(text) {
       }
     }
   }
+  if (hewanDetected && found) return 'hewan_gejala';
+  if (hewanDetected) return 'hewan';
   if (found) return 'gejala';
   return 'unknown';
 }
@@ -191,11 +194,11 @@ function generateChatbotResponse() {
     return 'Silakan sebutkan jenis hewan Anda. Contoh: <b>Kucing</b> atau <b>Anjing</b>';
   }
   if (chatbotSymptoms.size === 0) {
-    return 'Gejala tidak dikenali. Coba deskripsikan dengan kata lain. Misal: <i>"demam, lemas, mata merah"</i>';
+    return `Hewan terdeteksi: <b>${chatbotPet === 'kucing' ? 'Kucing' : 'Anjing'}</b>. Sekarang ceritakan gejala yang dialami.`;
   }
   triggerChatbotDiagnosis([...chatbotSymptoms], chatbotPet);
   const daftar = [...chatbotSymptoms].map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
-  let response = `${chatbotSymptoms.length} gejala terdeteksi:<br>${daftar}<br><br>`;
+  let response = `${chatbotSymptoms.size} gejala terdeteksi:<br>${daftar}<br><br>`;
   response += '<i>Menganalisis hasil...</i>';
   return response;
 }

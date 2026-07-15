@@ -198,7 +198,7 @@ body {
 
 .hero-orb--1 { width: 400px; height: 400px; background: rgba(79, 70, 229, 0.15); top: -10%; left: -5%; animation-delay: 0s; }
 .hero-orb--2 { width: 350px; height: 350px; background: rgba(13, 148, 136, 0.12); bottom: -15%; right: -5%; animation-delay: -4s; }
-.hero-orb--3 { width: 200px; height: 200px; background: rgba(99, 102, 241, 0.1); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -2s; }
+.hero-orb--3 { width: 200px; height: 200px; background: rgba(99, 102, 241, 0.1); top: 0; left: 0; right: 0; bottom: 0; margin: auto; animation-delay: -2s; }
 
 @keyframes orbFloat {
   0%, 100% { transform: translateY(0) scale(1); }
