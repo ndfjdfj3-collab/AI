@@ -8,14 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
   <nav class="navbar" id="navbar">
     <a href="/" class="nav-brand">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="VetExpert" style="height:80px; width:80px;">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="VetExpert" style="height:36px; width:36px;">
       VetExpert
     </a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">Menu</button>
@@ -24,8 +24,14 @@
       <li><a href="/diagnosa" class="nav-cta">Mulai Diagnosa</a></li>
     </ul>
   </nav>
-
+  
   <section class="hero">
+    <div class="hero-slideshow">
+      <div class="hero-slide active" data-index="0"></div>
+      <div class="hero-slide" data-index="1"></div>
+      <div class="hero-slide" data-index="2"></div>
+    </div>
+    <div class="hero-overlay"></div>
     <div class="hero-orb hero-orb--1"></div>
     <div class="hero-orb hero-orb--2"></div>
     <div class="hero-orb hero-orb--3"></div>
@@ -73,6 +79,22 @@
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => { document.getElementById('nav-links').classList.remove('open'); });
     });
+
+    const slides = document.querySelectorAll('.hero-slide');
+    const slideImages = [
+      'static/image/cat.jpg',
+      'static/image/dog.jpg',
+      'static/image/catdog.jpg',
+    ];
+    slides.forEach((el, i) => {
+      el.style.backgroundImage = `url("${slideImages[i]}")`;
+    });
+    let currentSlide = 0;
+    setInterval(() => {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 5000);
   </script>
 </body>
 </html>
