@@ -48,6 +48,10 @@ function switchMode(mode) {
   document.getElementById('tab-chatbot').classList.toggle('active', mode === 'chatbot');
   document.getElementById('panel-checklist').style.display = mode === 'checklist' ? 'block' : 'none';
   document.getElementById('panel-chatbot').style.display = mode === 'chatbot' ? 'block' : 'none';
+  const dp = document.querySelector('.diagnostic-panel');
+  const dg = document.querySelector('.dashboard-grid');
+  if (dp) dp.style.display = mode === 'checklist' ? 'block' : 'none';
+  if (dg) dg.style.gridTemplateColumns = mode === 'checklist' ? '1.2fr 1fr' : '1fr';
   if (mode === 'chatbot') {
     restartChatBot();
   } else {
@@ -189,11 +193,10 @@ function generateChatbotResponse() {
   if (chatbotSymptoms.size === 0) {
     return 'Gejala tidak dikenali. Coba deskripsikan dengan kata lain. Misal: <i>"demam, lemas, mata merah"</i>';
   }
-  triggerBackendDiagnosis([...chatbotSymptoms], chatbotPet);
+  triggerChatbotDiagnosis([...chatbotSymptoms], chatbotPet);
   const daftar = [...chatbotSymptoms].map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
   let response = `${chatbotSymptoms.length} gejala terdeteksi:<br>${daftar}<br><br>`;
-  response += '<b>Hasil Diagnosa</b> (lihat panel kanan)<br>';
-  response += '<i>Ada gejala lain? Ceritakan saja...</i>';
+  response += '<i>Menganalisis hasil...</i>';
   return response;
 }
 
@@ -271,6 +274,36 @@ async function triggerBackendDiagnosis(symptomsArray, petType) {
     document.getElementById('realtime-status-pill').textContent = 'Aktif';
     document.getElementById('realtime-status-pill').style.background = 'var(--neutral-100)';
     document.getElementById('realtime-status-pill').style.color = 'var(--text-muted)';
+  }
+}
+
+async function triggerChatbotDiagnosis(symptomsArray, petType) {
+  try {
+    const response = await fetch('/diagnosa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gejala: symptomsArray, hewan: petType })
+    });
+    if (!response.ok) throw new Error("Terjadi kesalahan koneksi server.");
+    const data = await response.json();
+    const daftar = symptomsArray.map(gid => `• <b>${gid}</b>: ${GEJALA[gid]}`).join('<br>');
+    let html = `<b>${symptomsArray.length} Gejala Terdeteksi</b><br>${daftar}<br><br>`;
+    html += `<b>Hasil Diagnosa</b><br>`;
+    if (!data.ada_diagnosa) {
+      html += `<span>✅ Tidak ada penyakit yang terdeteksi.</span>`;
+    } else {
+      html += data.hasil.map(r =>
+        `<div style="margin-top:0.5rem; padding:0.5rem; border-left:4px solid ${r.warna}; background:#1a1f2e; border-radius:6px;">
+          <b style="color:${r.warna}">${r.nama}</b> <span style="color:#94a3b8; font-size:0.8rem;">(${r.keyakinan}%)</span>
+          <p style="margin:0.25rem 0 0; font-size:0.8rem; color:#cbd5e1;">${r.deskripsi}</p>
+        </div>`
+      ).join('');
+    }
+    html += `<br><i style="color:#94a3b8;">Ada gejala lain? Ceritakan saja...</i>`;
+    addBotMessage(html);
+  } catch (error) {
+    console.error(error);
+    addBotMessage("Maaf, terjadi kesalahan saat menghubungi server. Silakan coba lagi.");
   }
 }
 
